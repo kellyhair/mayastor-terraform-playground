@@ -1,0 +1,60 @@
+---
+stages:
+- lv
+
+lv_shellcheck:
+  only:
+    refs:
+    - merge_requests
+    - master
+  stage: lv
+  tags: [docker]
+  image: koalaman/shellcheck-alpine
+  script:
+  - find bin/ -mindepth 1 -type f \! -name reformat-yaml | xargs shellcheck
+  - find -type d -name scripts | xargs -n1 -I% find % -type f | xargs shellcheck
+
+lv_yamllint:
+  only:
+    refs:
+    - merge_requests
+    - master
+  stage: lv
+  tags: [docker]
+  image:
+    name: cytopia/yamllint
+    entrypoint: ['']
+  script:
+  - 'yamllint -d "{extends: default, rules: {indentation:{spaces: 2, indent-sequences:
+    false}, empty-lines:{max-end: 1}, line-length:{max: 140}}}"
+    $(find /builds -name "*.yaml" -and -not -regex ".*/playground/.*")'
+
+lv_terraform_validate:
+  only:
+    refs:
+    - merge_requests
+    - master
+  stage: lv
+  tags: [docker]
+  cache:
+    paths:
+    - .terraform
+  image:
+    name: hashicorp/terraform:light
+    entrypoint: ['']
+  script:
+  - terraform init
+  - terraform validate
+
+lv_terraform_fmt:
+  only:
+    refs:
+    - merge_requests
+    - master
+  stage: lv
+  tags: [docker]
+  image:
+    name: hashicorp/terraform:light
+    entrypoint: ['']
+  script:
+  - /bin/sh -c "terraform fmt -recursive -check -diff $(pwd)"

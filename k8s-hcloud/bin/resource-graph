@@ -1,0 +1,18 @@
+#! /bin/sh -e
+
+# Usage: resource-graph.sh [<plan>]
+#  plan: Type of graph to output. Can be: plan, plan-destroy, apply, validate,
+#        input, refresh.
+
+BASE="$(realpath "$(dirname "$0")/..")"
+
+if [ -n "$1" ]; then
+	PLAN="-type=$1"
+fi
+
+(
+	cd "$BASE"
+	rm -f graph.png
+	terraform graph -draw-cycles "$PLAN" | dot -Tpng > graph.png
+	echo "${BASE}/graph.png"
+)
