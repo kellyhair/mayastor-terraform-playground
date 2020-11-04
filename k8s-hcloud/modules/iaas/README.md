@@ -4,7 +4,7 @@
 - k8s cluster
     - master
     - nodes
-- networking - calico
+- networking - flannel
 - floating IP and controller
 - hetzner volumes and controller
 
