@@ -1,7 +1,7 @@
-k8s-hcloud/.terraform.*
-k8s-hcloud/.terraform/
-k8s-hcloud/terraform.tfstate*
-k8s-hcloud/terraform.tfvars
+.terraform.*
+.terraform/
+terraform.tfstate*
+terraform.tfvars
 k8s-hcloud/.auto.tfvars
 k8s-hcloud/.DS_Store
 k8s-hcloud/modules/iaas/secrets/
@@ -9,3 +9,4 @@ k8s-hcloud/graph.png
 k8s-hcloud/venv/
 k8s-hcloud/terraform.lock
 k8s-hcloud/last.log
+aws-kubeadm/*.conf
