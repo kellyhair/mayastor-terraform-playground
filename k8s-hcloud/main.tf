@@ -19,11 +19,11 @@ module "paas" {
 
   source = "./modules/paas"
 
-  k8s_admin_conf     = module.iaas.k8s_admin_conf
-  k8s_master_ip      = module.iaas.master_ips[0]
-  masters            = module.iaas.masters
-  node_ips           = module.iaas.node_ips
-  nodes              = module.iaas.nodes
-  server_upload_dir  = var.server_upload_dir
+  k8s_admin_conf    = module.iaas.k8s_admin_conf
+  k8s_master_ip     = module.iaas.master_ips[0]
+  masters           = module.iaas.masters
+  node_ips          = module.iaas.node_ips
+  nodes             = module.iaas.nodes
+  server_upload_dir = var.server_upload_dir
 }
 

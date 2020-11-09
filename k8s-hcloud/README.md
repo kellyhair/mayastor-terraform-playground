@@ -13,3 +13,5 @@ node_count                      = 3
 See `k8s-hcloud/variables.tf`, `k8s-hcloud/modules/iaas/variables.tf`, `k8s-hcloud/modules/paas/variables.tf` for important defaults.
 
 NOTE: fip container will be broken after install as we don't have any FIPs
+
+If you have `kubectl` installed on your local machine, use `terraform output k8s_admin_conf` to locate `kubectl` config you can use to connect to the cluster or `source ./bin/export-kubeconfig.sh` in your shell to temporarily set it up via environment for `kubectl` to work.

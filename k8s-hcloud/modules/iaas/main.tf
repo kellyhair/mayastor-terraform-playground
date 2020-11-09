@@ -79,9 +79,12 @@ resource "hcloud_server" "node" {
   name        = "node-${count.index + 1}"
   server_type = var.node_type
   image       = var.node_image
+  user_data   = file("${path.module}/files/cloud-init.yaml")
   depends_on  = [hcloud_server.master]
   ssh_keys    = [for key in hcloud_ssh_key.admin_ssh_keys : key.id]
   location    = var.hetzner_location
+
+  // FIXME: re-create node on change in the scripts contents; triggers do not work here
 
   connection {
     host = self.ipv4_address
@@ -106,6 +109,11 @@ resource "hcloud_server" "node" {
   }
 
   provisioner "file" {
+    source      = "${path.module}/scripts/node-rootfs.sh"
+    destination = "${var.server_upload_dir}/node-rootfs.sh"
+  }
+
+  provisioner "file" {
     source      = "${path.module}/files/10-kubeadm.conf"
     destination = "${var.server_upload_dir}/10-kubeadm.conf"
   }
@@ -113,6 +121,10 @@ resource "hcloud_server" "node" {
   provisioner "file" {
     source      = "${path.module}/scripts/bootstrap.sh"
     destination = "${var.server_upload_dir}/bootstrap.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = ["bash \"${var.server_upload_dir}/node-rootfs.sh\""]
   }
 
   provisioner "remote-exec" {
@@ -170,8 +182,8 @@ resource "null_resource" "configure_fip" {
 # FIXME: use map instead of setunion in for_each to allow nice naming of firewall resources
 resource "null_resource" "cluster_firewall_master" {
   triggers = {
-    k8s_master_ipv4       = hcloud_server.master[0].ipv4_address
-    k8s_nodes_ipv4        = join(" ", [for node in hcloud_server.node : node.ipv4_address])
+    k8s_master_ipv4 = hcloud_server.master[0].ipv4_address
+    k8s_nodes_ipv4  = join(" ", [for node in hcloud_server.node : node.ipv4_address])
     # force redeploy on script change
     deploy_script_sha = filesha256("${path.module}/scripts/generate-firewall.sh")
   }
@@ -193,8 +205,8 @@ resource "null_resource" "cluster_firewall_master" {
 resource "null_resource" "cluster_firewall_node" {
   count = var.node_count
   triggers = {
-    k8s_master_ipv4       = hcloud_server.master[0].ipv4_address
-    k8s_nodes_ipv4        = join(" ", [for node in hcloud_server.node : node.ipv4_address])
+    k8s_master_ipv4 = hcloud_server.master[0].ipv4_address
+    k8s_nodes_ipv4  = join(" ", [for node in hcloud_server.node : node.ipv4_address])
     # force redeploy on script change
     deploy_script_sha = filesha256("${path.module}/scripts/generate-firewall.sh")
   }

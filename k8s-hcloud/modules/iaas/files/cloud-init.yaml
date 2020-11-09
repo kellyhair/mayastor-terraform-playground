@@ -1,0 +1,4 @@
+#cloud-config
+
+resize_rootfs: false
+
