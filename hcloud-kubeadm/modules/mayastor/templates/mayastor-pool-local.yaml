@@ -1,0 +1,9 @@
+apiVersion: "openebs.io/v1alpha1"
+kind: MayastorPool
+metadata:
+  name: mayastor-pool-local-${node}
+  namespace: mayastor
+spec:
+  node: ${node}
+  disks:
+    - /dev/sdb

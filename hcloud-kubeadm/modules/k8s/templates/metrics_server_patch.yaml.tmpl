@@ -1,0 +1,25 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metrics-server
+  namespace: kube-system
+spec:
+  template:
+    spec:
+      hostAliases:
+      - ip: ${master_ip}
+        hostnames:
+        - ${master}
+%{ for index,name in nodes ~}
+      - ip: ${node_ips[index]}
+        hostnames:
+        - ${name}
+%{ endfor ~}
+      containers:
+        - name: metrics-server
+          args:
+          - --cert-dir=/tmp
+          - --secure-port=4443
+          - --kubelet-port=10255
+          - --deprecated-kubelet-completely-insecure
