@@ -11,8 +11,9 @@ variable "num_workers" {
   default     = 1
 }
 
-variable "public_key_file" {
-  type        = string
-  description = "Filename of the public key of a key pair on your local machine."
-  default     = "~/.ssh/id_rsa.pub"
+# yeah, it seems azure supports only one key :(
+variable "public_key" {
+  type        = map
+  description = "Map containing either public key filename under 'key_file' or contents under 'key_data'"
+  default     = { "key_file" : "~/.ssh/id_rsa.pub" }
 }
