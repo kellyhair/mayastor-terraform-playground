@@ -2,6 +2,8 @@
 
 set -eux
 
+# FIXME use wait instead of loops e.g. for vm: https://docs.microsoft.com/en-us/cli/azure/vm?view=azure-cli-latest#az_vm_wait
+
 if [ -z "$KUBECONFIG" ]; then
 	echo "Script requires KUBECONFIG to be set" >&2
 	exit 1
