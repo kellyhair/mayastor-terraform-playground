@@ -1,3 +1,16 @@
+resource "null_resource" "server_upload_dir" {
+  triggers = {
+    k8s_master_ip     = var.k8s_master_ip
+    server_upload_dir = var.server_upload_dir
+  }
+  connection {
+    host = self.triggers.k8s_master_ip
+  }
+  provisioner "remote-exec" {
+    inline = ["mkdir -p \"${self.triggers.server_upload_dir}\""]
+  }
+}
+
 // Set label openebs.io/engine=mayastor on all cluster nodes - we want to run MSN on all nodes
 resource "null_resource" "mayastor_node_label" {
   for_each = toset(var.node_names)
@@ -57,7 +70,8 @@ resource "null_resource" "mayastor-pool-local" {
   triggers = {
     k8s_master_ip = var.k8s_master_ip
     mayastor_pool_local_yaml = templatefile("${path.module}/templates/mayastor-pool-local.yaml", {
-      node = each.key,
+      mayastor_disk = var.mayastor_disk,
+      node          = each.key,
     }),
     server_upload_dir = var.server_upload_dir
   }

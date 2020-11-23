@@ -18,6 +18,7 @@ module "mayastor" {
   source = "./modules/mayastor"
 
   k8s_master_ip     = module.k8s.master_ip
+  mayastor_disk     = "/dev/sdb"
   node_names        = module.k8s.nodes
   server_upload_dir = var.server_upload_dir
 }

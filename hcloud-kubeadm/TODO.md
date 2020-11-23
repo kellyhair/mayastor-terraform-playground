@@ -8,6 +8,7 @@
 [ ] fix auth to kubelet and don't use --deprecated-kubelet-completely-insecure in `module/k8s/install-metrics-server.tf`
 [ ] for the love of God handle machines' ssh keys properly instead of ignoring them
     - pass pre-generated keys using `user_data` (`cloud-init`) to `hcloud_server` resource?
+[ ] use hetzner VPC (network) in hcloud
 
 # Wishlist
 

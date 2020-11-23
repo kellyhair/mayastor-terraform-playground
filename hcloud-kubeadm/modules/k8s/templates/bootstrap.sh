@@ -96,7 +96,7 @@ systemctl daemon-reload
 systemctl enable local-iptables.service
 systemctl start local-iptables.service
 
-# disable systemd-resolvd as it break coredns & kubelet resolving :facepalm:
+# disable systemd-resolvd as it breaks coredns & kubelet resolving
 # https://coredns.io/plugins/loop/#troubleshooting
 # https://askubuntu.com/questions/907246/how-to-disable-systemd-resolved-in-ubuntu
 

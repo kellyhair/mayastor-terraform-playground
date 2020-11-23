@@ -8,7 +8,7 @@ This repo will create kubernetes cluster using `kubeadm` on [Hetzner cloud](http
 
 ### hetzner.cloud project API token with read-write permission
 
-* Create a [project](https://console.hetzner.cloud/projects)
+* Create a new [project](https://console.hetzner.cloud/projects) - recommended - allows resource isolation from other possible projects/resources in HCloud.
 * _Open project_ `->` _Security_ `->` _API Tokens_ `->` _GENERATE API TOKEN_
 * Give it a name, make sure it is _Read & Write token_
 

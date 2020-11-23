@@ -6,4 +6,4 @@ metadata:
 spec:
   node: ${node}
   disks:
-    - /dev/sdb
+    - ${mayastor_disk}
