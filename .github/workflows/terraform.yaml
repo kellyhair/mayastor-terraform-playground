@@ -21,3 +21,8 @@ jobs:
 
       - name: Validate
         run: ./validator
+
+      - name: Security Scan
+        uses: triat/terraform-security-scan@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
