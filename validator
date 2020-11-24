@@ -1,0 +1,13 @@
+#!/bin/bash
+
+TARGETS="aws-kubeadm hcloud-kubeadm azure-aks"
+
+set -e
+
+for target in $TARGETS ; do
+  echo "VALIDATOR: init @ $target"
+  (cd "$target" && terraform init)
+
+  echo "VALIDATOR: validate @ $target"
+  (cd "$target" && terraform validate)
+done

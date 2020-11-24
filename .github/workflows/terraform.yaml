@@ -1,0 +1,23 @@
+name: Terraform Validator
+on: [push, pull_request]
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Format Check
+        run: "terraform fmt -diff -recursive -write=false && terraform fmt -check -recursive"
+
+      - name: Validate
+        run: ./validator
