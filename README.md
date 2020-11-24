@@ -9,3 +9,4 @@ Status:
 - AWS in progress
 - Azure postponed at the moment
 
+You can also run checks locally with `act -P ubuntu-latest=node:12.6-buster` using [`act`](https://github.com/nektos/act).

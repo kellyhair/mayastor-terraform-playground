@@ -20,7 +20,7 @@ jobs:
         run: "terraform fmt -diff -recursive -write=false && terraform fmt -check -recursive"
 
       - name: Validate
-        run: ./validator
+        run: ./.github/workflows/validator
 
       - name: Security Scan via checkov
         id: checkov
