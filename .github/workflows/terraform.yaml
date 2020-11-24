@@ -28,5 +28,3 @@ jobs:
 
       - name: Security Scan via Triat
         uses: triat/terraform-security-scan@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
