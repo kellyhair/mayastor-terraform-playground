@@ -32,7 +32,7 @@ kubectl get pods
 NAME           READY   STATUS    RESTARTS   AGE
 fio-mayastor   1/1     Running   0          67s
 # run fio benchmark
-kubectl exec -it fio-mayastor -- fio --name=benchtest --size=800m --filename=/volume/test --direct=1 --rw=randrw --ioengine=libaio --bs=4k --iodepth=16 --numjobs=1 --time_based --runtime=60
+kubectl exec -it fio-mayastor -- fio --name=benchtest --size=800m --filename=/mnt/test --direct=1 --rw=randrw --ioengine=libaio --bs=4k --iodepth=16 --numjobs=1 --time_based --runtime=60
 ```
 
 To destroy the whole cluster run: `terraform destroy`. (Make sure you've deleted fio pod, otherwise destroy will hang/fail: `kubectl delete -f test-pod-fio-mayastor.yaml`.)
