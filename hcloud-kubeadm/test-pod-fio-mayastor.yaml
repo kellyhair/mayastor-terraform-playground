@@ -27,6 +27,6 @@ spec:
         - sleep
         - "1000000"
       volumeMounts:
-        - mountPath: "/mnt"
+        - mountPath: "/volume"
           name: ms-volume
 
