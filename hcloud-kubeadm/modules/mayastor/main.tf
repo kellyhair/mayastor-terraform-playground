@@ -64,6 +64,32 @@ resource "null_resource" "mayastor" {
   }
 }
 
+resource "null_resource" "mayastor_use_develop_images" {
+  count      = var.mayastor_use_develop_images ? 1 : 0
+  depends_on = [null_resource.mayastor]
+  triggers = {
+    k8s_master_ip = var.k8s_master_ip
+  }
+  connection {
+    host = self.triggers.k8s_master_ip
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "kubectl -n mayastor patch daemonsets.apps mayastor --patch '{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"mayastor\",\"image\":\"mayadata/mayastor:develop\"}]}}}}",
+      "kubectl -n mayastor patch daemonsets.apps mayastor-csi --patch '{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"mayastor-csi\",\"image\":\"mayadata/mayastor-csi:develop\"}]}}}}",
+      "kubectl -n mayastor patch deployment.apps moac --patch '{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"moac\",\"image\":\"mayadata/moac:develop\"}]}}}}'",
+    ]
+  }
+  provisioner "remote-exec" {
+    when = destroy
+    inline = [
+      "kubectl -n mayastor patch daemonsets.apps mayastor --patch '{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"mayastor\",\"image\":\"mayadata/mayastor:latest\"}]}}}}",
+      "kubectl -n mayastor patch daemonsets.apps mayastor-csi --patch '{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"mayastor-csi\",\"image\":\"mayadata/mayastor-csi:latest\"}]}}}}",
+      "kubectl -n mayastor patch deployment.apps moac --patch '{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"moac\",\"image\":\"mayadata/moac:latest\"}]}}}}'",
+    ]
+  }
+}
+
 resource "null_resource" "mayastor-pool-local" {
   depends_on = [null_resource.mayastor]
   for_each   = toset(var.node_names)

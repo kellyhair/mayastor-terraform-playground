@@ -82,3 +82,8 @@ variable "ebs_volume_size" {
   default     = 5
 }
 
+variable "mayastor_use_develop_images" {
+  type        = bool
+  description = "Use 'develop' tag for mayastor images instead of 'latest'"
+  default     = false
+}

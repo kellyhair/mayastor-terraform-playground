@@ -22,3 +22,8 @@ variable "admin_ssh_keys" {
   }
 }
 
+variable "mayastor_use_develop_images" {
+  type = bool
+  description = "Use 'develop' tag for mayastor images instead of 'latest'"
+  default = false
+}
