@@ -34,32 +34,33 @@ resource "null_resource" "mayastor" {
   depends_on = [null_resource.mayastor_node_label]
   triggers = {
     k8s_master_ip = var.k8s_master_ip
+    mayastor_image_tag = var.mayastor_use_develop_images ? "develop" : "latest"
   }
   connection {
     host = self.triggers.k8s_master_ip
   }
   provisioner "remote-exec" {
     inline = [
-      "kubectl create -f https://raw.githubusercontent.com/openebs/Mayastor/master/deploy/namespace.yaml",
-      "kubectl create -f https://raw.githubusercontent.com/openebs/Mayastor/master/deploy/moac-rbac.yaml",
-      "kubectl apply -f https://raw.githubusercontent.com/openebs/Mayastor/master/csi/moac/crds/mayastorpool.yaml",
-      "kubectl apply -f https://raw.githubusercontent.com/openebs/Mayastor/master/deploy/nats-deployment.yaml",
-      "kubectl apply -f https://raw.githubusercontent.com/openebs/Mayastor/master/deploy/csi-daemonset.yaml",
-      "kubectl apply -f https://raw.githubusercontent.com/openebs/Mayastor/master/deploy/moac-deployment.yaml",
-      "kubectl apply -f https://raw.githubusercontent.com/openebs/Mayastor/master/deploy/mayastor-daemonset.yaml",
+      "kubectl create -f https://raw.githubusercontent.com/openebs/Mayastor/${self.triggers.mayastor_image_tag}/deploy/namespace.yaml",
+      "kubectl create -f https://raw.githubusercontent.com/openebs/Mayastor/${self.triggers.mayastor_image_tag}/deploy/moac-rbac.yaml",
+      "kubectl apply -f https://raw.githubusercontent.com/openebs/Mayastor/${self.triggers.mayastor_image_tag}/csi/moac/crds/mayastorpool.yaml",
+      "kubectl apply -f https://raw.githubusercontent.com/openebs/Mayastor/${self.triggers.mayastor_image_tag}/deploy/nats-deployment.yaml",
+      "kubectl apply -f https://raw.githubusercontent.com/openebs/Mayastor/${self.triggers.mayastor_image_tag}/deploy/csi-daemonset.yaml",
+      "kubectl apply -f https://raw.githubusercontent.com/openebs/Mayastor/${self.triggers.mayastor_image_tag}/deploy/moac-deployment.yaml",
+      "kubectl apply -f https://raw.githubusercontent.com/openebs/Mayastor/${self.triggers.mayastor_image_tag}/deploy/mayastor-daemonset.yaml",
       "sleep 10",
     ]
   }
   provisioner "remote-exec" {
     when = destroy
     inline = [
-      "kubectl delete -f https://raw.githubusercontent.com/openebs/Mayastor/master/deploy/mayastor-daemonset.yaml",
-      "kubectl delete -f https://raw.githubusercontent.com/openebs/Mayastor/master/deploy/moac-deployment.yaml",
-      "kubectl delete -f https://raw.githubusercontent.com/openebs/Mayastor/master/deploy/csi-daemonset.yaml",
-      "kubectl delete -f https://raw.githubusercontent.com/openebs/Mayastor/master/deploy/nats-deployment.yaml",
-      "kubectl delete -f https://raw.githubusercontent.com/openebs/Mayastor/master/csi/moac/crds/mayastorpool.yaml",
-      "kubectl delete -f https://raw.githubusercontent.com/openebs/Mayastor/master/deploy/moac-rbac.yaml",
-      "kubectl delete -f https://raw.githubusercontent.com/openebs/Mayastor/master/deploy/namespace.yaml",
+      "kubectl delete -f https://raw.githubusercontent.com/openebs/Mayastor/${self.triggers.mayastor_image_tag}/deploy/mayastor-daemonset.yaml",
+      "kubectl delete -f https://raw.githubusercontent.com/openebs/Mayastor/${self.triggers.mayastor_image_tag}/deploy/moac-deployment.yaml",
+      "kubectl delete -f https://raw.githubusercontent.com/openebs/Mayastor/${self.triggers.mayastor_image_tag}/deploy/csi-daemonset.yaml",
+      "kubectl delete -f https://raw.githubusercontent.com/openebs/Mayastor/${self.triggers.mayastor_image_tag}/deploy/nats-deployment.yaml",
+      "kubectl delete -f https://raw.githubusercontent.com/openebs/Mayastor/${self.triggers.mayastor_image_tag}/csi/moac/crds/mayastorpool.yaml",
+      "kubectl delete -f https://raw.githubusercontent.com/openebs/Mayastor/${self.triggers.mayastor_image_tag}/deploy/moac-rbac.yaml",
+      "kubectl delete -f https://raw.githubusercontent.com/openebs/Mayastor/${self.triggers.mayastor_image_tag}/deploy/namespace.yaml",
     ]
   }
 }
