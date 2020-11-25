@@ -77,7 +77,7 @@ kubectl get pod fio-mayastor
 and now you can run fio:
 
 ```
-kubectl exec -it fio-mayastor -- fio --name=benchtest --size=800m --filename=/volume/test --direct=1 --rw=randrw --ioengine=libaio --bs=4k --iodepth=16 --numjobs=1 --time_based --runtime=60
+kubectl exec -it fio-mayastor -- fio --name=benchtest --size=800m --filename=/mnt/test --direct=1 --rw=randrw --ioengine=libaio --bs=4k --iodepth=16 --numjobs=1 --time_based --runtime=60
 ```
 
 For comparison you can run the benchmark directly against hetzner's cloud disk:
@@ -95,7 +95,7 @@ kubectl get pod fio-hcloud
 and run the benchmark:
 
 ```
-kubectl exec -it fio-hcloud -- fio --name=benchtest --size=800m --filename=/volume/test --direct=1 --rw=randrw --ioengine=libaio --bs=4k --iodepth=16 --numjobs=1 --time_based --runtime=60
+kubectl exec -it fio-hcloud -- fio --name=benchtest --size=800m --filename=/mnt/test --direct=1 --rw=randrw --ioengine=libaio --bs=4k --iodepth=16 --numjobs=1 --time_based --runtime=60
 ```
 
 Given that mayastor is a terraform module you can use terraform targeting to destroy and re-create mayastor deployment (possibly with different settings). Just make sure you destroy testing pod & volume before doing so:
